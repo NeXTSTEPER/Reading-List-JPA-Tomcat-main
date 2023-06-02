@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>JPA Books </title>
+        <title>JPA Reading List </title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
@@ -38,7 +38,7 @@
 
   <body>
         <div class="container">
-            <h1>JPA Book List</h1>
+            <h1>JPA Reading List</h1>
             <form method="POST" action="BookServlet" onsubmit="return validateForm()">
                 Book Title: <input type="text" id="bookTitle" name="bookTitle" />
                 Book Author: <input type="text" id="bookAuthor" name="bookAuthor" />
