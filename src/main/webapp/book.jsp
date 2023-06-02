@@ -5,35 +5,66 @@
 <html>
     <head>
         <title>JPA Reading List </title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f1f1f1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        width: 80%;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+    form {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    input[type="text"] {
+        margin: 5px 0;
+        padding: 10px;
+        width: 80%;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    input[type="submit"] {
+        margin: 5px 0;
+        padding: 10px;
+        width: 30%;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .book {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    h1 {
+        font-family: 'Indie Flower', cursive;
+        text-align: center;
+        color: #4CAF50;
+    }
+    li {
+        font-size: 1.5em;  /* Adjust this value to make the list items larger or smaller */
+    }
+</style>
 
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f1f1f1;
-            }
-            .container {
-                width: 80%;
-                margin: 0 auto;
-                background-color: #fff;
-                padding: 20px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            }
-            form {
-                margin-bottom: 20px;
-            }
-            .book {
-                border-bottom: 1px solid #eee;
-                padding-bottom: 10px;
-                margin-bottom: 20px;
-            }
-            h1 {
-                font-family: 'Indie Flower', cursive;
-                text-align: center;
-            }
-        </style>
+
     </head>
 
   <body>
