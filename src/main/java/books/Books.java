@@ -1,3 +1,11 @@
+/**
+ * @author - Alex Cox
+ * CIS175 2023
+ * 
+ */
+
+
+
 package books;
 
 // Importing necessary libraries for our Books class
