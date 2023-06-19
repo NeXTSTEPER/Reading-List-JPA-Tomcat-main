@@ -8,7 +8,7 @@
     <listener-class>books.BookListener</listener-class>
   </listener>
   <listener>
-    <listener-class>books.BookListener</listener-class>
+    <listener-class>movies.MovieListener</listener-class>
   </listener>
   <servlet>
     <description></description>
@@ -19,5 +19,15 @@
   <servlet-mapping>
     <servlet-name>BookServlet</servlet-name>
     <url-pattern>/BookServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MoviesServlet</display-name>
+    <servlet-name>MoviesServlet</servlet-name>
+    <servlet-class>movies.MoviesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MoviesServlet</servlet-name>
+    <url-pattern>/MoviesServlet</url-pattern>
   </servlet-mapping>
 </web-app>

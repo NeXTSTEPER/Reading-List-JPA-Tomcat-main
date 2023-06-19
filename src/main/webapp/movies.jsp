@@ -1,12 +1,12 @@
 <%@page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@page import="java.util.*,books.Books"%>
+<%@page import="java.util.*,movies.Movies"%>
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>JPA Reading List </title>
+        <title>JPA Movie List</title>
   <style>
-        body {
+    body {
                 font-family: 'Helvetica', serif;
                 margin: 0;
                 padding: 0;
@@ -28,7 +28,7 @@
             input[type="text"] {
                 margin: 5px 0;
                 padding: 10px;
-                width: 80%;
+                width: 19%;
                 border-radius: 5px;
                 border: 1px solid #ccc;
                 color: #000;
@@ -37,7 +37,7 @@
             input[type="submit"] {
                 margin: 5px 0;
                 padding: 10px;
-                width: 30%;
+                width: 20%;
                 border-radius: 5px;
                 border: 1px solid #ccc;
                 background-color: #ff4b3e;
@@ -48,7 +48,7 @@
             input[type="submit"]:hover {
                 background-color: #fff;
             }
-            .book {
+            .movie {
                 border-bottom: 1px solid #fff;
                 padding-bottom: 10px;
                 margin-bottom: 20px;
@@ -61,28 +61,13 @@
             div {
                 padding: 0 20px;
             }
+            ol, li {
+                margin: 0;
+                padding: 0;
+                list-style-position: inside;
+            }
             
-             input[type="text"] {
-        width: 19%;  /* adjust this to your needs */
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-
-    input[type="submit"] {
-        width: 20%;  /* adjust this to your needs */
-        padding: 10px;
-        background-color: #ff4b3e;
-        border: none;
-        color: white;
-    }
-            
-             ol, li {
-    margin: 0;
-    padding: 0;
-    list-style-position: inside;
-}
-
- a.back-to-index {
+            a.back-to-index {
     display: inline-block;
     margin-bottom: 20px;
     padding: 10px;
@@ -97,8 +82,6 @@ a.back-to-index:hover {
     background-color: #EC5A49;
     color: #000000;
 }
-
-
 </style>
 
 
@@ -107,35 +90,35 @@ a.back-to-index:hover {
   <body>
         <div class="container">
         <br>
-            <a href="index.jsp" class="back-to-index"> Back</a>
+    <a href="index.jsp" class="back-to-index">Back</a>
         
-            <h1>JPA Reading List</h1>
-            <form method="POST" action="BookServlet" onsubmit="return validateForm()">
-                Book Title: <input type="text" id="bookTitle" name="bookTitle" />
-                Book Author: <input type="text" id="bookAuthor" name="bookAuthor" />
+            <h1>JPA Movie List</h1>
+            <form method="POST" action="MoviesServlet" onsubmit="return validateForm()">
+                Movie Title: <input type="text" id="movieTitle" name="movieTitle" />
+                Movie Director: <input type="text" id="movieDirector" name="movieDirector" />
                 <input type="submit" value="Add" />
-                <p id="error" style="color:red; display:none">Please enter a book title and author.</p>
+                <p id="error" style="color:red; display:none">Please enter a movie title and director.</p>
             </form>
             <hr>
             <ol> 
                 <%
                  @SuppressWarnings("unchecked")
-                                 List<Books> books = (List<Books>)request.getAttribute("books");
-                                 for (Books book : books) {
+                                 List<Movies> movies = (List<Movies>)request.getAttribute("movies");
+                                 for (Movies movie : movies) {
                  %>
-                    <div class="book">
-                        <li> <%= book %> </li>
+                    <div class="movie">
+                        <li> <%= movie %> </li>
 
-                        <form method="POST" action="BookServlet">
-                            <input type="hidden" name="id" value="<%=book.getId()%>" />
-                            <input type="text" name="bookTitle" value="<%=book.getBookTitle()%>" />
-                            <input type="text" name="bookAuthor" value="<%=book.getBookAuthor()%>" />
+                        <form method="POST" action="MoviesServlet">
+                            <input type="hidden" name="id" value="<%=movie.getId()%>" />
+                            <input type="text" name="movieTitle" value="<%=movie.getMovieTitle()%>" />
+                            <input type="text" name="movieDirector" value="<%=movie.getMovieDirector()%>" />
                             <input type="hidden" name="operation" value="update" />
                             <input type="submit" value="Update" />
                         </form>
 
-                        <form method="POST" action="BookServlet">
-                            <input type="hidden" name="id" value="<%=book.getId()%>" />
+                        <form method="POST" action="MoviesServlet">
+                            <input type="hidden" name="id" value="<%=movie.getId()%>" />
                             <input type="hidden" name="operation" value="delete" />
                             <input type="submit" value="Delete" />
                         </form>
@@ -147,9 +130,9 @@ a.back-to-index:hover {
         </div>
         <script>
             function validateForm() {
-                var bookTitle = document.getElementById('bookTitle').value;
-                var bookAuthor = document.getElementById('bookAuthor').value;
-                if (bookTitle == "" || bookAuthor == "") {
+                var movieTitle = document.getElementById('movieTitle').value;
+                var movieDirector = document.getElementById('movieDirector').value;
+                if (movieTitle == "" || movieDirector == "") {
                     document.getElementById('error').style.display = 'block';
                     return false;
                 } else {
