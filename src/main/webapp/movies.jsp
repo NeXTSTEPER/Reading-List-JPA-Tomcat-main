@@ -102,35 +102,35 @@
                 <p id="error" style="color:red; display:none">Please enter a movie title and director.</p>
             </form>
             <hr>
-            <ol> 
-                <%
-                 @SuppressWarnings("unchecked")
-                 List<Movies> movies = (List<Movies>)request.getAttribute("movies");
-                 for (Movies movie : movies) {
-                %>
-                    <div class="movie">
-                        <li> <%= movie.getMovieTitle() %> 
-                        <% if (movie.getBook() != null) { %>
-                            (Based on: <%= movie.getBook().getBookTitle() %>)
-                        <% } else { %>
-                            (Not based on a book)
-                        <% } %>
-                        </li>
-                        <form method="POST" action="MoviesServlet">
-                            <input type="hidden" name="id" value="<%=movie.getId()%>" />
-                            <input type="text" name="movieTitle" value="<%=movie.getMovieTitle()%>" />
-                            <input type="text" name="movieDirector" value="<%=movie.getMovieDirector()%>" />
-                            <input type="hidden" name="operation" value="update" />
-                            <input type="submit" value="Update" />
-                        </form>
-                        <form method="POST" action="MoviesServlet">
-                            <input type="hidden" name="id" value="<%=movie.getId()%>" />
-                            <input type="hidden" name="operation" value="delete" />
-                            <input type="submit" value="Delete" />
-                        </form>
-                    </div>
-                <% } %>
-            </ol>
+         <ol> 
+    <%
+     @SuppressWarnings("unchecked")
+     List<Movies> movies = (List<Movies>)request.getAttribute("movies");
+     for (Movies movie : movies) {
+    %>
+        <div class="movie">
+            <li> <%= movie.getMovieTitle() %> by <%= movie.getMovieDirector() %> 
+            <% if (movie.getBook() != null) { %>
+                (Based on: <%= movie.getBook().getBookTitle() %>)
+            <% } else { %>
+                (Not based on a book)
+            <% } %>
+            </li>
+            <form method="POST" action="MoviesServlet">
+                <input type="hidden" name="id" value="<%=movie.getId()%>" />
+                <input type="text" name="movieTitle" value="<%=movie.getMovieTitle()%>" />
+                <input type="text" name="movieDirector" value="<%=movie.getMovieDirector()%>" />
+                <input type="hidden" name="operation" value="update" />
+                <input type="submit" value="Update" />
+            </form>
+            <form method="POST" action="MoviesServlet">
+                <input type="hidden" name="id" value="<%=movie.getId()%>" />
+                <input type="hidden" name="operation" value="delete" />
+                <input type="submit" value="Delete" />
+            </form>
+        </div>
+    <% } %>
+</ol>
             <hr>
         </div>
         <script>
