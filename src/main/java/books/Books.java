@@ -10,15 +10,20 @@ package books;
 
 // Importing necessary libraries for our Books class
 import java.io.Serializable; // This allows our Books objects to be converted into a format that can be stored and retrieved easily.
+import java.util.List;
+
 import javax.persistence.Entity; // This marks our Books class as an entity which can be mapped to a database.
 import javax.persistence.GeneratedValue; // This is for our ID field which is auto-incremented.
 import javax.persistence.GenerationType; // This is needed to specify the type of auto-increment.
 import javax.persistence.Id; // This marks our id field as the primary key of our table.
+import javax.persistence.OneToMany;
 import javax.persistence.Table; // This is needed to specify the name of the table that this entity is mapped to.
+
+import movies.Movies;
 
 // Defining entity class Books which will represent a table named 'items' in the database.
 @Entity
-@Table(name="items")
+@Table(name="books")
 public class Books implements Serializable {
     
     // A unique identifier for versions of the class to verify during deserialization
@@ -32,6 +37,18 @@ public class Books implements Serializable {
     private String bookTitle; // Title of the book
     
     private String bookAuthor; // Author of the book
+    
+    @OneToMany(mappedBy="book")
+    private List<Movies> moviesBasedOnThisBook;
+    
+ // getters and setters for 'moviesBasedOnThisBook'
+    public List<Movies> getMoviesBasedOnThisBook() {
+        return moviesBasedOnThisBook;
+    }
+
+    public void setMoviesBasedOnThisBook(List<Movies> moviesBasedOnThisBook) {
+        this.moviesBasedOnThisBook = moviesBasedOnThisBook;
+    }
 
     // Constructors:
     // Default constructor for Books class

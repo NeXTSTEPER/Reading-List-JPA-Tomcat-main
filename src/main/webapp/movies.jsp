@@ -1,12 +1,12 @@
 <%@page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@page import="java.util.*,movies.Movies"%>
+<%@page import="java.util.*,movies.Movies, books.Books"%>
 
 <!DOCTYPE html>
 <html>
     <head>
         <title>JPA Movie List</title>
-  <style>
-    body {
+        <style>
+     body {
                 font-family: 'Helvetica', serif;
                 margin: 0;
                 padding: 0;
@@ -66,36 +66,38 @@
                 padding: 0;
                 list-style-position: inside;
             }
-            
             a.back-to-index {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px;
-    color: white;
-    text-decoration: none;
-    border: 1px solid #EC5A49;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-a.back-to-index:hover {
-    background-color: #EC5A49;
-    color: #000000;
-}
-</style>
-
-
+                display: inline-block;
+                margin-bottom: 20px;
+                padding: 10px;
+                color: white;
+                text-decoration: none;
+                border: 1px solid #EC5A49;
+                border-radius: 5px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+            a.back-to-index:hover {
+                background-color: #EC5A49;
+                color: #000000;
+            }        </style>
     </head>
-
-  <body>
+     <body>
         <div class="container">
-        <br>
-    <a href="index.jsp" class="back-to-index">Back</a>
-        
+            <br>
+            <a href="index.jsp" class="back-to-index">Back</a>
             <h1>JPA Movie List</h1>
             <form method="POST" action="MoviesServlet" onsubmit="return validateForm()">
                 Movie Title: <input type="text" id="movieTitle" name="movieTitle" />
                 Movie Director: <input type="text" id="movieDirector" name="movieDirector" />
+                Based on Book:
+               <select id="bookId" name="bookId">
+                   <option value="-1">None</option>
+                    <% @SuppressWarnings("unchecked")
+                       List<Books> books = (List<Books>)request.getAttribute("books");
+                       for (Books book : books) { %>
+                        <option value="<%= book.getId() %>"><%= book.getBookTitle() %></option>
+                    <% } %>
+                </select>
                 <input type="submit" value="Add" />
                 <p id="error" style="color:red; display:none">Please enter a movie title and director.</p>
             </form>
@@ -103,12 +105,17 @@ a.back-to-index:hover {
             <ol> 
                 <%
                  @SuppressWarnings("unchecked")
-                                 List<Movies> movies = (List<Movies>)request.getAttribute("movies");
-                                 for (Movies movie : movies) {
-                 %>
+                 List<Movies> movies = (List<Movies>)request.getAttribute("movies");
+                 for (Movies movie : movies) {
+                %>
                     <div class="movie">
-                        <li> <%= movie %> </li>
-
+                        <li> <%= movie.getMovieTitle() %> 
+                        <% if (movie.getBook() != null) { %>
+                            (Based on: <%= movie.getBook().getBookTitle() %>)
+                        <% } else { %>
+                            (Not based on a book)
+                        <% } %>
+                        </li>
                         <form method="POST" action="MoviesServlet">
                             <input type="hidden" name="id" value="<%=movie.getId()%>" />
                             <input type="text" name="movieTitle" value="<%=movie.getMovieTitle()%>" />
@@ -116,13 +123,11 @@ a.back-to-index:hover {
                             <input type="hidden" name="operation" value="update" />
                             <input type="submit" value="Update" />
                         </form>
-
                         <form method="POST" action="MoviesServlet">
                             <input type="hidden" name="id" value="<%=movie.getId()%>" />
                             <input type="hidden" name="operation" value="delete" />
                             <input type="submit" value="Delete" />
                         </form>
-                        
                     </div>
                 <% } %>
             </ol>

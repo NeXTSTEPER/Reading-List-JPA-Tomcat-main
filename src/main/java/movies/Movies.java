@@ -12,7 +12,11 @@ import javax.persistence.Entity; // This marks our Movie class as an entity whic
 import javax.persistence.GeneratedValue; // This is for our ID field which is auto-incremented.
 import javax.persistence.GenerationType; // This is needed to specify the type of auto-increment.
 import javax.persistence.Id; // This marks our id field as the primary key of our table.
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table; // This is needed to specify the name of the table that this entity is mapped to.
+
+import books.Books;
 
 // Defining entity class Movie which will represent a table named 'movies' in the database.
 @Entity
@@ -26,6 +30,25 @@ public class Movies implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Generate id automatically with identity strategy (auto incremented field)
     private int id; // Unique identifier for each movie
+    
+    @ManyToOne
+    @JoinColumn(name="book_id")
+    private Books book;
+    private String bookId;
+
+    // getters and setters for 'book'
+    public Books getBook() {
+        return book;
+    }
+    
+
+    public String getBookId() {
+        return this.bookId;
+    }
+
+    public void setBook(Books book) {
+        this.book = book;
+    }
     
     private String movieTitle; // Title of the movie
     
@@ -41,6 +64,8 @@ public class Movies implements Serializable {
         this.movieTitle = movieTitle;
         this.movieDirector = movieDirector;
     }
+    
+    
 
     // String Representation:
     // Overriding the toString method to represent our movie
@@ -48,6 +73,8 @@ public class Movies implements Serializable {
     public String toString() {
         return this.movieTitle + " directed by " + this.movieDirector;
     }
+    
+    
 
     // Getter methods
     // Method to get id of the movie

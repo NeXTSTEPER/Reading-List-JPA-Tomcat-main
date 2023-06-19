@@ -5,45 +5,41 @@ import java.io.IOException; // Handling I/O exceptions
 import java.util.List; // Using List for handling collections of objects
 import javax.servlet.ServletException; // Handling servlet exceptions
 import javax.servlet.http.*; // Using HttpServlet, HttpServletRequest, HttpServletResponse
+
+import books.Books;
+
 import javax.persistence.*; // Importing classes related to database operations
 
-// Class extending HttpServlet to handle HTTP requests related to movies
 public class MoviesServlet extends HttpServlet {
     
-    // Unique identifier for versions of the class to verify during deserialization
     private static final long serialVersionUID = 1L;
 
-    // Method handling HTTP GET requests
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Create EntityManager for database operations
         EntityManagerFactory emf = (EntityManagerFactory)getServletContext().getAttribute("emf");
         EntityManager em = emf.createEntityManager();
 
         try {
-            // Extract movie title and director from request
             String movieTitle = request.getParameter("movieTitle");
             String movieDirector = request.getParameter("movieDirector");
-            
-            // If the parameters are not null or empty, create a new movie
+
             if (movieTitle != null && !movieTitle.trim().isEmpty() && movieDirector != null && !movieDirector.trim().isEmpty()) {
                 em.getTransaction().begin();
                 em.persist(new Movies(movieTitle, movieDirector));
                 em.getTransaction().commit();
             } else {
-                // If the parameters are null or empty, set an error message in the request
                 request.setAttribute("error", "Please enter a title and director.");
             }
 
-            // Retrieve a list of all movies and set it in the request
             List<Movies> movieList = em.createQuery("SELECT m FROM Movies m", Movies.class).getResultList();
             request.setAttribute("movies", movieList);
-            
-            // Forward request to the JSP page
+
+            List<Books> bookList = em.createQuery("SELECT b FROM Books b", Books.class).getResultList();
+            request.setAttribute("books", bookList);
+
             request.getRequestDispatcher("/movies.jsp").forward(request, response);
         } finally {
-            // Ensure any active transaction is rolled back and EntityManager is closed
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
@@ -51,22 +47,21 @@ public class MoviesServlet extends HttpServlet {
         }
     }
 
-    // Method handling HTTP POST requests
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Extract movie title, director, operation type, and id from request
         String movieTitle = request.getParameter("movieTitle");
         String movieDirector = request.getParameter("movieDirector");
         String operation = request.getParameter("operation");
         String id = request.getParameter("id");
+        String bookId = request.getParameter("bookId");
+        
+        System.out.println("bookId: " + bookId); // print the bookId to the console
 
-        // Create EntityManager for database operations
         EntityManagerFactory emf = (EntityManagerFactory)getServletContext().getAttribute("emf");
         EntityManager em = emf.createEntityManager();
 
         try {
-            // If operation is delete, find the movie by id and remove it
             if (operation != null && operation.equals("delete") && id != null) {
                 em.getTransaction().begin();
                 Movies movie = em.find(Movies.class, Integer.parseInt(id));
@@ -74,8 +69,7 @@ public class MoviesServlet extends HttpServlet {
                     em.remove(movie);
                 }
                 em.getTransaction().commit();
-            } 
-            // If operation is update, find the movie by id and update its title and director
+            }
             else if (operation != null && operation.equals("update") && movieTitle != null && !movieTitle.trim().isEmpty() && movieDirector != null && !movieDirector.trim().isEmpty() && id != null) {
                 em.getTransaction().begin();
                 Movies movie = em.find(Movies.class, Integer.parseInt(id));
@@ -84,29 +78,37 @@ public class MoviesServlet extends HttpServlet {
                     movie.setMovieDirector(movieDirector);
                 }
                 em.getTransaction().commit();
-            } 
-            // If operation is update but title and director are missing, set an error message in the request
+            }
             else if (operation != null && operation.equals("update")) {
                 request.setAttribute("error", "Please enter a title and director for update.");
-            } 
-            // If no operation is specified, create a new movie
+            }
             else if (movieTitle != null && !movieTitle.trim().isEmpty() && movieDirector != null && !movieDirector.trim().isEmpty()) {
                 em.getTransaction().begin();
-                em.persist(new Movies(movieTitle, movieDirector));
+                Movies movie = new Movies(movieTitle, movieDirector);
+
+                if (bookId != null && !bookId.trim().isEmpty() && !bookId.trim().equals("-1")) {
+                    Books book = em.find(Books.class, Integer.parseInt(bookId));
+                    if (book != null) {
+                        movie.setBook(book);
+                    } else {
+                        request.setAttribute("error", "No book found with the provided id.");
+                    }
+                }
+
+                em.persist(movie);
                 em.getTransaction().commit();
             } else {
-                // If title and director are missing, set an error message in the request
-                request.setAttribute("error", "Please enter a title and director.");
+                request.setAttribute("error", "Please enter a movie title and director.");
             }
 
-            // Retrieve a list of all movies and set it in the request
             List<Movies> movieList = em.createQuery("SELECT m FROM Movies m", Movies.class).getResultList();
             request.setAttribute("movies", movieList);
-            
-            // Forward request to the JSP page
+
+            List<Books> bookList = em.createQuery("SELECT b FROM Books b", Books.class).getResultList();
+            request.setAttribute("books", bookList);
+
             request.getRequestDispatcher("/movies.jsp").forward(request, response);
         } finally {
-            // Ensure any active transaction is rolled back and EntityManager is closed
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
